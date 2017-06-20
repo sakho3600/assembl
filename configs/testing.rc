@@ -1,0 +1,9 @@
+_extends = ./mac.rc
+saucelab = 
+saucelab_username = 
+saucelab_password = 
+
+# Could be localhost
+target = https://dev-assembl.bluenove.com/sandbox
+browsers = 
+OSs = 

@@ -132,6 +132,7 @@ repoze.sendmail==4.1  # rq.filter: <4.2
 requests-oauthlib==0.6.1
 requests==2.10.0
 rsa==3.4.2
+sauceclient==1.0.0
 scikit-learn==0.17.1
 scipy==0.17.1
 selenium==2.53.5
