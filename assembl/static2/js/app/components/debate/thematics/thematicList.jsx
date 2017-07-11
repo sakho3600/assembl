@@ -1,18 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import Slider from 'react-slick';
 import { Row, Col } from 'react-bootstrap';
 import { get } from '../../../utils/routeMap';
-import Slider from 'react-slick';
 
-import SliderSettings, { SliderPrevArrow, SliderNextArrow } from '../navigation/sliderSettings';
+import SliderSettings from '../navigation/sliderSettings';
 import ThematicPreview from './thematicPreview';
 
 class ThematicList extends React.Component {
   renderThematicList() {
     const { thematics, identifier, slug } = this.props;
-
     return thematics.map((thematic, index) => {
       return (
-        <Col key={index} xs={12} sm={6} md={3} className='theme no-padding'>
+        <Col key={index} xs={12} sm={6} md={3} className={'theme no-padding'}>
           <ThematicPreview
             imgUrl={thematic.imgUrl}
             numPosts={thematic.numPosts}
@@ -24,14 +24,14 @@ class ThematicList extends React.Component {
         </Col>
       );
     });
-  };
+  }
 
   render() {
     const { thematics } = this.props;
-    
+
     return (
       <Row className="no-margin">
-        { thematics.length > 4 && 
+        { thematics.length > 4 &&
           <Slider {...SliderSettings}>
             { this.renderThematicList() }
           </Slider>
@@ -41,5 +41,11 @@ class ThematicList extends React.Component {
     );
   }
 }
+
+ThematicList.propTypes = {
+  thematics: PropTypes.Array.isRequired,
+  identifier: PropTypes.string.isRequired,
+  slug: PropTypes.string.isRequired
+};
 
 export default ThematicList;

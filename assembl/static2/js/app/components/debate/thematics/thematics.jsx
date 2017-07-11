@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
@@ -22,9 +23,9 @@ class Thematics extends React.Component {
             </div>
             <div className="content-section">
               {
-                thematics.length && 
-                <ThematicList 
-                  thematics={thematics} 
+                thematics.length &&
+                <ThematicList
+                  thematics={thematics}
                   identifier={identifier}
                   slug={slug}
                 />
@@ -36,5 +37,11 @@ class Thematics extends React.Component {
     );
   }
 }
+
+Thematics.propTypes = {
+  thematics: PropTypes.Array.isRequired,
+  identifier: PropTypes.string.isRequired
+};
+
 
 export default Thematics;

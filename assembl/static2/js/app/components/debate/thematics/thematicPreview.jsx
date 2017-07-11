@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import Statistic from '../../common/statistic';
 
@@ -21,5 +22,14 @@ class ThematicPreview extends React.Component {
     );
   }
 }
+
+ThematicPreview.propTypes = {
+  imgUrl: PropTypes.string,
+  numPosts: PropTypes.number.isRequired,
+  numContributors: PropTypes.number.isRequired,
+  link: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string
+};
 
 export default ThematicPreview;
