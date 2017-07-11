@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import { get } from '../../../utils/routeMap';
 import Slider from 'react-slick';
 
-import SliderSettings, { SliderPrevArrow, SliderNextArrow } from '../../common/sliderSettings';
+import SliderSettings, { SliderPrevArrow, SliderNextArrow } from '../navigation/sliderSettings';
 import ThematicPreview from './thematicPreview';
 
 class ThematicList extends React.Component {
