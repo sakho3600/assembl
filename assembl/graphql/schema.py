@@ -74,8 +74,13 @@ def resolve_langstring(langstring, locale_code):
     if locale_code is None:
         return langstring.best_entry_in_request().value
 
-    return {e.locale_code: e.value
-            for e in entries}.get(locale_code, None)
+    cache = {e.locale_code: e.value for e in entries}
+    text = cache.get(locale_code, None)
+
+    if not text:
+        return langstring.best_lang().value
+
+    return text
 
 
 def resolve_langstring_entries(obj, attr):
@@ -858,6 +863,9 @@ class UpdateThematic(graphene.Mutation):
             raise HTTPUnauthorized()
 
         with cls.default_db.no_autoflush:
+            # introducing history at every step, including thematics + questions
+            # TODO: review performance impact
+            thematic.copy(tombstone=True)
             title_entries = args.get('title_entries')
             if title_entries is not None and len(title_entries) == 0:
                 raise Exception('Thematic titleEntries needs at least one entry')
@@ -915,7 +923,7 @@ class UpdateThematic(graphene.Mutation):
 
                 attachment = models.IdeaAttachment(
                     document=document,
-#                    idea=thematic,
+                    # idea=thematic,
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
@@ -933,6 +941,9 @@ class UpdateThematic(graphene.Mutation):
                         id_ = int(Node.from_global_id(question_input['id'])[1])
                         updated_questions.add(id_)
                         question = models.Question.get(id_)
+                        # Again, archiving the question
+                        # TODO: review performance impact
+                        question.copy(tombstone=True)
                         update_langstring_from_input_entries(
                             question, 'title', question_input['title_entries'])
                         # modify question order
@@ -951,7 +962,7 @@ class UpdateThematic(graphene.Mutation):
                 # remove question (tombstone it) that are not in questions_input
                 for question_id in set(existing_questions.keys()
                         ).difference(updated_questions):
-                    existing_questions[question_id].tombstone_date = datetime.utcnow()
+                    existing_questions[question_id].is_tombstone = True
 
             db.flush()
 
@@ -978,7 +989,7 @@ class DeleteThematic(graphene.Mutation):
         if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
 
-        thematic.tombstone_date = datetime.utcnow()
+        thematic.is_tombstone = True
         thematic.db.flush()
         return DeleteThematic(success=True)
 
@@ -1005,7 +1016,7 @@ class CreatePost(graphene.Mutation):
         if isinstance(in_reply_to_idea, models.Question):
             cls = models.PropositionPost
         else:
-            cls = models.Post
+            cls = models.AssemblPost
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
