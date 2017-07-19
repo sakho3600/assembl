@@ -1,23 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class SliderPrevArrow extends React.Component {
-  render() {
-    const { className, style, onClick } = this.props;
-
-    return (
-      <div
-        className={`${className} glyphicon glyphicon-chevron-left`}
-        style={{ ...style, display: 'block', background: 'navy', left: '-15px' }}
-        onClick={onClick}
-      />
-    );
-  }
-}
+const SliderPrevArrow = (props) => {
+  const { className, style, onClick, active } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, background: 'black', opacity: 0.8, display: active }}
+      onClick={onClick}
+    />
+  );
+};
 
 SliderPrevArrow.propTypes = {
   className: PropTypes.string,
-  style: PropTypes.Object,
+  style: PropTypes.object,
   onClick: PropTypes.func
 };
 

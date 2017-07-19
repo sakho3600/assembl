@@ -3,37 +3,49 @@ import React from 'react';
 import SliderPrevArrow from './sliderPrevArrow';
 import SliderNextArrow from './sliderNextArrow';
 
-const SliderSettings = {
-  dots: false,
-  infinite: false,
-  speed: 500,
-  slidesToShow: 4,
-  slidesToScroll: 4,
-  initialSlide: 0,
-  responsive: [{
-    breakpoint: 1024,
-    settings: {
-      slidesToShow: 3,
-      slidesToScroll: 3,
-      infinite: true,
-      dots: false
-    }
-  }, {
-    breakpoint: 600,
-    settings: {
-      slidesToShow: 2,
-      slidesToScroll: 2,
-      initialSlide: 2
-    }
-  }, {
-    breakpoint: 480,
-    settings: {
-      slidesToShow: 1,
-      slidesToScroll: 1
-    }
-  }],
-  prevArrow: <SliderPrevArrow />,
-  nextArrow: <SliderNextArrow />
+const responsiveSettings = [{
+  breakpoint: 1024,
+  settings: {
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    initialSlide: 0
+  }
+}, {
+  breakpoint: 600,
+  settings: {
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    initialSlide: 0
+  }
+}, {
+  breakpoint: 480,
+  settings: {
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    initialSlide: 0
+  }
+}];
+
+const SliderSettings = (slidesCount, showPrevArrow = true, showNextArrow = true) => {
+  /*
+    To use with centermode = true;
+    const initialSlide = slidesCount % 2 === 0 ? (slidesCount / 2) + 1 : Math.round(slidesCount / 2);
+    */
+
+  return {
+    dots: false,
+    infinite: false,
+    accessibility: true,
+    speed: 450,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    centerMode: false,
+    variableWidth: true,
+    responsive: responsiveSettings,
+    prevArrow: <SliderPrevArrow active={showPrevArrow} />,
+    nextArrow: <SliderNextArrow active={showNextArrow} />
+  };
 };
 
 export default SliderSettings;
