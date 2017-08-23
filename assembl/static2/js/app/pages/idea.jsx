@@ -82,6 +82,12 @@ class Idea extends React.Component {
     return (
       <div className="idea">
         <Header title={idea.title} imgUrl={idea.imgUrl} identifier="thread" />
+        {/* {idea.longTitle
+          ? <section>
+            <h2>What we need to know:</h2>
+            <div dangerouslySetInnerHTML={{ __html: idea.longTitle }} />
+          </section>
+          : null} */}
         <section className="post-section">
           <Grid fluid className="background-color">
             <div className="max-container">
