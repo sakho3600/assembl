@@ -75,6 +75,7 @@ class Post extends React.PureComponent {
       sentimentCounts,
       mySentiment,
       publicationState
+      // extracts
     } = this.props.data.post;
     const { lang, ideaId, refetchIdea, creationDate } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
@@ -101,6 +102,20 @@ class Post extends React.PureComponent {
 
     return (
       <div className="posts" id={id}>
+        {/* {extracts.length
+          ? <div className="extracts" style={{ position: 'absolute', left: 0, width: 100 }}>
+            <div className="label">Extracts</div>
+            <div className="badges">
+              {extracts.map((extract) => {
+                return (
+                  <span key={extract.id}>
+                    {extract.body}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+          : null} */}
         <div className="box">
           <Row className="post-row">
             <Col xs={12} md={11} className="post-left">
