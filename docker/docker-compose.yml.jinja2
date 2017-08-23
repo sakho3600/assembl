@@ -31,6 +31,8 @@ services:
       - redisdata:/data
     networks:
       - my_net
+    sysctls:
+      - net.core.somaxconn=512
 
   memcached:
     image: memcached:1.4-alpine
