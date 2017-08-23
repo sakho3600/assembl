@@ -1,0 +1,14 @@
+upstream mailu_web {
+  server mailu_http_1;
+}
+
+server {
+  listen 80 default_server;
+
+  server_name mail.{{public_hostname_}};
+
+  location / {
+    proxy_pass $scheme://mailu_web;
+    proxy_redirect $scheme://mailu_web $scheme://$server_name;
+  }
+}
