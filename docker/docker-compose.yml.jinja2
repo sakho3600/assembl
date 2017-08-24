@@ -48,9 +48,6 @@ services:
 
   web:
     image: nginx:1.12-alpine
-    ports:
-      - "80:80"
-      - "443:443"
     volumes:
       - .:/opt/default_config
       - assembl_static:/opt/assembl_static
