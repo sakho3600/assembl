@@ -1563,6 +1563,7 @@ def docker_compose():
     compose_template = jenv.get_template('docker-compose.yml.jinja2')
     compose_stage1_template = jenv.get_template('docker-compose-stage1.yml.jinja2')
     mailu_template = jenv.get_template('nginx_mailu.jinja2')
+    sentry_template = jenv.get_template('nginx_sentry.jinja2')
     # Get local random information to give to docker
     if os.path.exists(env.random_file):
         env.update(as_rc(env.random_file))
@@ -1579,6 +1580,8 @@ def docker_compose():
         f.write(compose_stage1_template.render(**env))
     with open('./docker/build/nginx_mail.%s.conf' % (hostname,), 'w') as f:
         f.write(mailu_template.render(public_hostname_=hostname, **env))
+    with open('./docker/build/nginx_sentry.%s.conf' % (hostname,), 'w') as f:
+        f.write(sentry_template.render(public_hostname_=hostname, **env))
     # run("docker-compose -f docker/build/docker-compose.yml up")
 
 
