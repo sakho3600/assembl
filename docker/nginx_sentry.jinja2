@@ -1,0 +1,14 @@
+upstream assembl_sentry {
+  server build_sentry_1:9000;
+}
+
+server {
+  listen 80;
+
+  server_name sentry.{{public_hostname_}};
+
+  location / {
+    proxy_pass $scheme://assembl_sentry;
+    proxy_redirect $scheme://assembl_sentry $scheme://$server_name;
+  }
+}
