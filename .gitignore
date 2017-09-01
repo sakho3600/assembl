@@ -31,6 +31,8 @@ assembl/locale/*/LC_MESSAGES/*.jed.json
 /src
 /virtuoso
 /assembl_dumps
+/docker/build/
+/assembl-backup.pgdump
 
 # local
 /random.ini
