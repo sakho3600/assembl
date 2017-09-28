@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
-import { getPhaseName, getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import WhatYouNeedToKnow from './whatYouNeedToKnow';
+import { getPhaseName, getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { getLocalizedContentFromString } from '../../../utils/globalFunctions';
 
 class Header extends React.Component {
   render() {
@@ -12,21 +13,7 @@ class Header extends React.Component {
     const { locale } = this.props.i18n;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
     const closedPhaseName = getPhaseName(debateData.timeline, identifier, locale).toLowerCase();
-    // This hack should be removed when the TDI's admin section will be done.
-    // We need it to have several langString in the idea's title
-    const titlesArray = title.split('#!');
-    let localizedTitle = '';
-    titlesArray.forEach((t) => {
-      const titleLocale = t.split('$!')[1];
-      if (titleLocale) {
-        if (titleLocale.trim() === locale) {
-          localizedTitle = t.split('$!')[0];
-        }
-      } else {
-        localizedTitle = title;
-      }
-    });
-    // End of the hack
+    const localizedTitle = getLocalizedContentFromString(title, locale);
     return (
       <section className="header-section">
         <Grid fluid className="max-container">
@@ -48,7 +35,7 @@ class Header extends React.Component {
             <div className="header-bkg-mask">&nbsp;</div>
           </Row>
         </Grid>
-        {longTitle && <WhatYouNeedToKnow longTitle={longTitle} />}
+        {longTitle && <WhatYouNeedToKnow longTitle={longTitle} locale={locale} />}
       </section>
     );
   }
