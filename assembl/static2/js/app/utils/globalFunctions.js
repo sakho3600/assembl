@@ -171,17 +171,16 @@ export const getLocaleContentDictFromDelimitedString = (content) => {
     localizedContent = content.split('#!');
     localizedContent.forEach((entry) => {
       if (entry) {
-        const dividedEntry = entry.split("$!");
+        const dividedEntry = entry.split('$!');
         const locale = dividedEntry[0].trim();
         const body = dividedEntry[1].trim();
-        content[locale] = body;
+        finalContent[locale] = body;
       }
     });
 
     return finalContent;
-  }
-  catch (e) {
-    //Catch the failure downstream
+  } catch (e) {
+    // Catch the failure downstream
     return content;
   }
 };
@@ -193,5 +192,5 @@ export const getLocaleContentDictFromDelimitedString = (content) => {
 */
 export const getLocalizedContentFromString = (content, locale) => {
   const finalContent = getLocaleContentDictFromDelimitedString(content);
-  return finalContent[locale] || "null";
+  return finalContent[locale];
 };
