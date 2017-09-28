@@ -172,8 +172,8 @@ export const getLocaleContentDictFromDelimitedString = (content) => {
     localizedContent.forEach((entry) => {
       if (entry) {
         const dividedEntry = entry.split('$!');
-        const locale = dividedEntry[0].trim();
-        const body = dividedEntry[1].trim();
+        const locale = dividedEntry[1].trim();
+        const body = dividedEntry[0].trim();
         finalContent[locale] = body;
       }
     });
