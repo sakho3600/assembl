@@ -8,7 +8,7 @@ from random import sample as random_sample
 
 from sqlalchemy import desc, inspect
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm import joinedload_all, undefer
+from sqlalchemy.orm import joinedload, subqueryload, undefer
 from sqlalchemy.sql.functions import count
 import graphene
 from graphene.pyutils.enum import Enum as PyEnum
@@ -679,7 +679,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
             related, Post.id == related.c.post_id
             ).order_by(desc(Post.creation_date), Post.id
             ).options(
-                joinedload_all(Post.creator),
+                joinedload(Post.creator),
                 undefer(Post.idea_content_links_above_post)
             )
         if len(discussion.discussion_locales) > 1:
@@ -768,7 +768,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                 post_ids, min(len(post_ids), limit))
             query = Post.query.filter(Post.id.in_(random_posts_ids)
                 ).options(
-                    joinedload_all(Post.creator),
+                    joinedload(Post.creator),
                 )
             if len(discussion.discussion_locales) > 1:
                 query = query.options(
@@ -787,7 +787,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                 ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
                 ).order_by(desc(Post.creation_date), Post.id
                 ).options(
-                    joinedload_all(Post.creator),
+                    joinedload(Post.creator),
                 )
             if len(discussion.discussion_locales) > 1:
                 query = query.options(
@@ -902,7 +902,17 @@ class Query(graphene.ObjectType):
         descendants_query = model.get_descendants_query(
             root_idea_id, inclusive=True)
         query = query.filter(model.id.in_(descendants_query)
-            ).filter(model.hidden == False).filter(model.sqla_type.in_(('idea', 'root_idea'))).order_by(model.id)
+            ).filter(
+                model.hidden == False,
+                model.sqla_type.in_(('idea', 'root_idea'))
+            ).options(
+                joinedload(Idea.source_links),
+                subqueryload(Idea.attachments).joinedload("document"),
+                subqueryload(Idea.message_columns),
+                joinedload(Idea.title).subqueryload("entries"),
+                joinedload(Idea.synthesis_title).subqueryload("entries"),
+                joinedload(Idea.description).subqueryload("entries"),
+            ).order_by(model.id)
         return query
 
     def resolve_thematics(self, args, context, info):
