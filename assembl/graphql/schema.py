@@ -391,7 +391,6 @@ class PostAttachment(SecureObjectType, SQLAlchemyObjectType):
     document = graphene.Field(Document)
 
 
-
 class PostInterface(SQLAlchemyInterface):
     class Meta:
         model = models.Post
