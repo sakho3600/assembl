@@ -16,7 +16,7 @@ from sqlalchemy import (
     func
 )
 from ..lib.sqla_types import CoerceUnicode
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, deferred
 
 from datetime import datetime
 from ..lib.sqla import DuplicateHandling
@@ -160,7 +160,7 @@ class File(Document):
                 onupdate='CASCADE'), primary_key=True)
 
     # Should we defer this?
-    data = Column(LargeBinary, nullable=False)
+    data = deferred(Column(LargeBinary, nullable=False))
 
     @Document.external_url.getter
     def external_url(self):
