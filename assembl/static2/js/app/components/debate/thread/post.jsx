@@ -64,6 +64,11 @@ class Post extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    const { body } = this.getBodyAndSubject();
+    if (body.indexOf('<img src')) {
+      this.props.measureTreeHeight(200);
+    }
+
     if (this.props.lang !== prevProps.lang || this.props.data.post.publicationState !== prevProps.data.post.publicationState) {
       this.props.measureTreeHeight(200);
     }
@@ -89,27 +94,12 @@ class Post extends React.PureComponent {
     this.setState({ mode: 'view' }, this.props.measureTreeHeight);
   };
 
-  render() {
-    const {
-      id,
-      subjectEntries,
-      bodyEntries,
-      bodyMimeType,
-      indirectIdeaContentLinks,
-      creator,
-      modificationDate,
-      sentimentCounts,
-      mySentiment,
-      publicationState,
-      attachments,
-      extracts
-    } = this.props.data.post;
-    const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren, routerParams, debateData } = this.props;
-    // creationDate is retrieved by IdeaWithPosts query, not PostQuery
+  getBodyAndSubject = () => {
+    const { subjectEntries, bodyEntries } = this.props.data.post;
     let body;
     let subject;
-    let originalBodyLocale;
     let originalBody;
+    let originalBodyLocale;
     let originalSubject;
     if (bodyEntries.length > 1) {
       // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
@@ -122,6 +112,7 @@ class Post extends React.PureComponent {
       body = bodyEntries[0].value;
       originalBody = bodyEntries[0].value;
     }
+
     if (subjectEntries.length > 1) {
       subject = this.state.showOriginal ? subjectEntries[1].value : subjectEntries[0].value;
       originalSubject = subjectEntries[1].value;
@@ -129,6 +120,33 @@ class Post extends React.PureComponent {
       subject = subjectEntries[0].value;
       originalSubject = subjectEntries[0].value;
     }
+    return {
+      body: body,
+      subject: subject,
+      originalBody: originalBody,
+      originalBodyLocale: originalBodyLocale,
+      originalSubject: originalSubject
+    };
+  };
+
+  render() {
+    const {
+      id,
+      bodyMimeType,
+      indirectIdeaContentLinks,
+      creator,
+      modificationDate,
+      sentimentCounts,
+      mySentiment,
+      publicationState,
+      attachments,
+      extracts
+    } = this.props.data.post;
+    const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren, routerParams, debateData } = this.props;
+    // creationDate is retrieved by IdeaWithPosts query, not PostQuery
+
+    const { body, subject, originalBody, originalBodyLocale, originalSubject } = this.getBodyAndSubject();
+
     // This hack should be removed when the TDI's admin section will be done.
     // We need it to have several langString in the idea's title
     const ideaContentLinks = [];
@@ -160,6 +178,7 @@ class Post extends React.PureComponent {
         {originalSubject && originalSubject.replace('Re: ', '')}
       </span>
     );
+
     if (publicationState in DeletedPublicationStates) {
       return (
         <DeletedPost
