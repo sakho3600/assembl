@@ -74,6 +74,7 @@
     "classnames": "^2.2.5",
     "draft-convert": "^2",
     "draft-js": "^0.10.1",
+    "gojs": "^1.7.26",
     "graphql": "^0.10.5",
     "graphql-anywhere": "^3.1.0",
     "history": "^3.0.0",
