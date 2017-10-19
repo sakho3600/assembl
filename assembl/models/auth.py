@@ -1846,7 +1846,7 @@ class UserLanguagePreference(Base):
                         order_by=source_of_evidence))
 
     crud_permissions = CrudPermissions(
-            P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN,
+            P_READ, P_READ, P_READ, P_READ,
             P_READ, P_READ, P_READ)
 
     def is_owner(self, user_id):

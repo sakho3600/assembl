@@ -339,6 +339,11 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'body', 'important')
 
 
+class UserLanguagePreference(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.UserLanguagePreference
+
+
 class LocalePreference(graphene.ObjectType):
     locale = graphene.String()
     name = graphene.String(in_locale=graphene.String(required=True))
