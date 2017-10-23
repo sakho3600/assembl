@@ -5,6 +5,7 @@ import configureStore from './configureStore';
 import middlewares from './middlewares';
 import rootReducer from '../reducers/rootReducer';
 import { getLocale, getTranslations } from '../utils/i18n';
+import { LOCALE } from '../constants';
 
 export default function createAppStore(initialState) {
   const store = configureStore(initialState, rootReducer, middlewares);
@@ -15,8 +16,8 @@ export default function createAppStore(initialState) {
     });
   }
   const browserLanguage = navigator.language || navigator.userLanguage;
-  const isStoragedlocale = localStorage.getItem('locale') !== null;
-  const userLocale = isStoragedlocale ? localStorage.getItem('locale') : getLocale(browserLanguage);
+  const isStoragedlocale = localStorage.getItem(LOCALE) !== null;
+  const userLocale = isStoragedlocale ? localStorage.getItem(LOCALE) : getLocale(browserLanguage);
   syncTranslationWithStore(store);
   store.dispatch(loadTranslations(getTranslations()));
   store.dispatch(setLocale(userLocale));

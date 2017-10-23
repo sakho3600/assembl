@@ -5,6 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 import { getAvailableLocales } from '../../utils/i18n';
 import { addLanguagePreference } from '../../actions/adminActions';
+import { LOCALE } from '../../constants';
 import withLoadingIndicator from './withLoadingIndicator';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
@@ -24,7 +25,7 @@ class LanguageMenu extends React.Component {
 
   doChangeLanguage(key) {
     const { changeLanguage } = this.props;
-    localStorage.setItem('locale', key);
+    localStorage.setItem(LOCALE, key);
     changeLanguage(key);
   }
 

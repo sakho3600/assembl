@@ -31,3 +31,6 @@ ModeratedPublicationStates[PublicationStates.MODERATED_TEXT_ON_DEMAND] = Publica
 export const DeletedPublicationStates = {};
 DeletedPublicationStates[PublicationStates.DELETED_BY_USER] = PublicationStates.DELETED_BY_USER;
 DeletedPublicationStates[PublicationStates.DELETED_BY_ADMIN] = PublicationStates.DELETED_BY_ADMIN;
+
+// This is to be consistent with Pyramid's check for a locale in the request
+export const LOCALE = '_LOCALE_';
