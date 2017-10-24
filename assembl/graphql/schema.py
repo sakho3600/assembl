@@ -39,6 +39,7 @@ from assembl.models.action import (
 from assembl.models.auth import (
     LanguagePreferenceCollection,
     LanguagePreferenceCollectionWithDefault,
+    UserLanguagePreferenceCollection,
     LanguagePreferenceOrder)
 from assembl.nlp.translation_service import DummyGoogleTranslationService
 from .types import SQLAlchemyInterface, SQLAlchemyUnion
@@ -353,7 +354,7 @@ class UserLanguagePreference(SecureObjectType, SQLAlchemyObjectType):
     user = graphene.Field(AgentProfile)
     locale = graphene.Field(lambda: Locale)
     translation_locale = graphene.Field(lambda: Locale)
-    preferred_order = graphene.Int()
+    order = graphene.Int()
     source = graphene.Field(PreferenceSourceEnum)
 
 
@@ -1054,10 +1055,15 @@ class Query(graphene.ObjectType):
         user_id = Node.from_global_id(args.get('user_id'))[1]
         user = models.User.get(user_id)
         prefs = user.language_preference
-        return [UserLanguagePreference(
+        prefs.sort(key= lambda ulp: (ulp.preferred_order, ulp.source_of_evidence))
+        ulps = [UserLanguagePreference(
             user=AgentProfile(user_id=p.user_id),
             locale=Locale(locale_code=p.locale.base_locale),
-            source=p.source_of_evidence) for p in prefs]
+            source=p.source_of_evidence,
+            translation_locale=p.translate_to_locale.base_locale if p.translate_to_locale is not None
+                else None,
+            order=p.preferred_order) for p in prefs]
+        return ulps
 
 
 class VideoInput(graphene.InputObjectType):
