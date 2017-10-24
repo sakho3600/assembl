@@ -37,7 +37,9 @@ from assembl.models.action import (
     LikeSentimentOfPost, DisagreeSentimentOfPost,
     DontUnderstandSentimentOfPost, MoreInfoSentimentOfPost)
 from assembl.models.auth import (
-    LanguagePreferenceCollection, LanguagePreferenceCollectionWithDefault)
+    LanguagePreferenceCollection,
+    LanguagePreferenceCollectionWithDefault,
+    LanguagePreferenceOrder)
 from assembl.nlp.translation_service import DummyGoogleTranslationService
 from .types import SQLAlchemyInterface, SQLAlchemyUnion
 
@@ -339,9 +341,20 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'body', 'important')
 
 
+PreferenceSourceEnum = graphene.Enum.from_enum(LanguagePreferenceOrder)
+
+
 class UserLanguagePreference(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.UserLanguagePreference
+        interfaces = (Node, )
+        only_fields = ('id')
+
+    user = graphene.Field(AgentProfile)
+    locale = graphene.Field(lambda: Locale)
+    translation_locale = graphene.Field(lambda: Locale)
+    preferred_order = graphene.Int()
+    source = graphene.Field(PreferenceSourceEnum)
 
 
 class LocalePreference(graphene.ObjectType):
@@ -939,7 +952,7 @@ class IdeaUnion(SQLAlchemyUnion):
 
 class Locale(graphene.ObjectType):
     locale_code = graphene.String(required=True)
-    label = graphene.String(required=True)
+    label = graphene.String(required=False)
 
 
 class Query(graphene.ObjectType):
@@ -953,6 +966,8 @@ class Query(graphene.ObjectType):
     default_preferences = graphene.Field(DiscussionPreferences)
     locales = graphene.List(Locale, lang=graphene.String(required=True))
     total_sentiments = graphene.Int()
+    language_preferences = graphene.List(
+        UserLanguagePreference, user_id=graphene.String(required=True))
 
     def resolve_total_sentiments(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -1034,6 +1049,15 @@ class Query(graphene.ObjectType):
         return [Locale(locale_code=locale_code, label=label)
                 for locale_code, label in sorted(labels.items(),
                                                  key=lambda entry: entry[1])]
+
+    def resolve_language_preferences(self, args, context, info):
+        user_id = Node.from_global_id(args.get('user_id'))[1]
+        user = models.User.get(user_id)
+        prefs = user.language_preference
+        return [UserLanguagePreference(
+            user=AgentProfile(user_id=p.user_id),
+            locale=Locale(locale_code=p.locale.base_locale),
+            source=p.source_of_evidence) for p in prefs]
 
 
 class VideoInput(graphene.InputObjectType):

@@ -1617,6 +1617,7 @@ query {
     assert positive[u"numPosts"] == 1
     assert negative[u"numPosts"] == 1
 
+
 def test_query_discussion_sentiments_count(
         graphql_request):
     res = schema.execute(u"""query {
@@ -1625,3 +1626,22 @@ def test_query_discussion_sentiments_count(
     res_data = json.loads(json.dumps(res.data))
     count = res_data[u"totalSentiments"]
     assert count == 0
+
+
+def test_user_language_preference(graphql_request,
+                                  admin_user,
+                                  user_language_preference_fr_cookie):
+
+    idea_id = to_global_id("User", admin_user.id)
+    res = schema.execute("""
+        query {
+            languagePreferences(userId: "%s") {
+                locale {
+                    localeCode
+                }
+                source
+            }
+        }""" % idea_id, graphql_request)
+    assert len(res.data['languagePreferences']) == 1
+    assert res.data['languagePreferences'][0]['locale']['localeCode'] == u'fr'
+    assert res.data['languagePreferences'][0]['source'] == u'Cookie'
