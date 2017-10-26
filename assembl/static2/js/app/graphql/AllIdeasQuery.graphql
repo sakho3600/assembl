@@ -7,7 +7,9 @@ query AllIdeasQuery($lang: String!) {
       numPosts
       numContributors
       numChildren
-      imgUrl
+      img {
+        externalUrl
+      }
       order
       parentId
     }
