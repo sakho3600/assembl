@@ -1633,6 +1633,10 @@ query { resources {
     title(lang:"en")
     text(lang:"en")
     embedCode
+    doc {
+        externalUrl
+        title
+    }
     image {
         externalUrl
     }
@@ -1643,5 +1647,10 @@ query { resources {
     assert res.data['resources'][0]['text'] == u'Lorem ipsum dolor sit amet'
     assert res.data['resources'][0]['embedCode'] == u'<iframe ...>'
 
+    assert res.data['resources'][0]['doc'] == None
     assert res.data['resources'][0]['image'] == None
+
     assert res.data['resources'][1]['image']['externalUrl'] == "http://localhost:6543/data/Discussion/1/documents/1/data"
+    assert res.data['resources'][1]['doc']['externalUrl'] == "http://localhost:6543/data/Discussion/1/documents/2/data"
+    # this is the title of the File object, not the title of the ResourceAttachment object
+    assert res.data['resources'][1]['doc']['title'] == "mydocument.pdf"
