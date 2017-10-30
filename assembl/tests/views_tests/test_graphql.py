@@ -365,7 +365,7 @@ mutation myFirstMutation($img:String, $thematicId:ID!) {
 }
 """, context_value=graphql_request, variable_values={"thematicId": thematic_id,
                                                      "img": u"variables.img"})
-    assert res.data['updateThematic']['thematic']['imgUrl'].endswith('/documents/2/data')
+    assert res.data['updateThematic']['thematic']['imgUrl'].endswith('/data')
 
 
 def test_mutation_create_thematic_multilang_explicit_en(graphql_request):
