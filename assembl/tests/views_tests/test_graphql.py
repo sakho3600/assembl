@@ -333,7 +333,7 @@ mutation myFirstMutation($img:String) {
 #                u'imgUrl': u'http://localhost:6543/data/Discussion/8/documents/1/data'
 #    }}}
 #    just assert we have the ends correct:
-    assert res.data['createThematic']['thematic']['imgUrl'].endswith('/documents/1/data')
+    assert res.data['createThematic']['thematic']['imgUrl'].endswith('/data')
     assert res.data['createThematic']['thematic']['imgMimetype'] == 'image/png'
     thematic_id = res.data['createThematic']['thematic']['id']
 
