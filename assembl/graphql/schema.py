@@ -594,7 +594,7 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_ideas(self, args, context, info):
         return self.get_ideas()
-    
+
     def resolve_img_url(self, args, context, info):
         ideas = self.get_ideas()
         first_ida = ideas[0] if ideas else None
@@ -699,6 +699,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     contributors = graphene.List(AgentProfile)
     announcement = graphene.Field(lambda: IdeaAnnoucement)
     message_columns = graphene.List(lambda: IdeaMessageColumn)
+    phase_identifier = graphene.String()
 
     @classmethod
     def is_type_of(cls, root, context, info):
@@ -730,6 +731,9 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_synthesis_title(self, args, context, info):
         return resolve_langstring(self.synthesis_title, args.get('lang'))
+
+    def resolve_phase_identifier(self, args, context, info):
+        return "thread"
 
     def resolve_title_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'title')

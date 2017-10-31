@@ -23,20 +23,21 @@ const Synthesis = ({ classifier, synthesisTitle, synthesisBody, hyphenStyle }) =
   );
 };
 
-export default ({
-  color,
-  classifier,
-  synthesisProps,
-  width,
-  data,
-  contentLocaleMapping,
-  lang,
-  initialRowIndex,
-  noRowsRenderer,
-  ideaId,
-  refetchIdea,
-  ideaTitle
-}) => {
+export default (props) => {
+  const {
+    color,
+    classifier,
+    synthesisProps,
+    width,
+    data,
+    contentLocaleMapping,
+    lang,
+    initialRowIndex,
+    noRowsRenderer,
+    ideaId,
+    refetchIdea,
+    ideaTitle
+  } = props;
   return (
     <div className="column-view" style={{ width: width }}>
       <ColumnHeader color={color} classifier={classifier} ideaId={ideaId} refetchIdea={refetchIdea} ideaTitle={ideaTitle} />
