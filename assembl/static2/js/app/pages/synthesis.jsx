@@ -1,10 +1,21 @@
 import React from 'react';
-import { Grid, Col } from 'react-bootstrap';
+import { Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 
 import Loader from '../components/common/loader';
 import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
+import IdeaSynthesis from '../components/synthesis/IdeaSynthesis';
+
+const synthesisMock = {
+  title: 'My super synthesis',
+  imageSrc:
+    'http://www.evilenglish.net/wp-content/uploads/2014/05/305908d1359615600-madejski-miracle-wtf-shit_640_417_s_c1_center_top_0_0.jpg',
+  body: 'Everything is awesomeeeeeeee!!',
+  numContributors: 42,
+  numPosts: 1337,
+  ideaLink: '/ai-consultation/debate/thread/theme/SWRlYTo2Mzk='
+};
 
 export class DumbSynthesis extends React.Component {
   render() {
@@ -14,15 +25,10 @@ export class DumbSynthesis extends React.Component {
     }
     const { synthesis } = data;
     return (
-      <Grid fluid>
-        <div className="max-container">
-          <Col xs={12} sm={12}>
-            <div>
-              {synthesis.subject}
-            </div>
-          </Col>
-        </div>
-      </Grid>
+      <div className="max-container">
+        <Translate value="synthesis.title" />
+        <IdeaSynthesis {...synthesisMock} />
+      </div>
     );
   }
 }
