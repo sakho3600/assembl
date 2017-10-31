@@ -9,11 +9,20 @@ import InfiniteSeparator from '../../../components/common/infiniteSeparator';
 
 class ThreadView extends React.Component {
   render() {
-    const { isUserConnected, idea, contentLocaleMapping, refetchIdea, lang, noRowsRenderer, posts, initialRowIndex } = this.props;
+    const {
+      isUserConnected,
+      ideaId,
+      contentLocaleMapping,
+      refetchIdea,
+      lang,
+      noRowsRenderer,
+      posts,
+      initialRowIndex
+    } = this.props;
     return (
       <div className="overflow-x">
         {!isUserConnected || connectedUserCan(Permissions.ADD_POST)
-          ? <TopPostFormContainer ideaId={idea.id} refetchIdea={refetchIdea} />
+          ? <TopPostFormContainer ideaId={ideaId} refetchIdea={refetchIdea} />
           : null}
         <Grid fluid className="background-grey">
           <div className="max-container background-grey">

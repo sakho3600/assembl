@@ -141,10 +141,8 @@ class Idea extends React.Component {
     const isMultiColumn = ideaWithPostsData.loading ? undefined : ideaWithPostsData.idea.messageColumns.length > 0;
     const messageColumns = ideaWithPostsData.loading ? undefined : ideaWithPostsData.idea.messageColumns;
     const childProps = {
-      idea: {
-        id: id,
-        title: title
-      },
+      ideaId: id,
+      ideaTitle: title,
       ideaWithPostsData: ideaWithPostsData,
       isUserConnected: getConnectedUserId(),
       contentLocaleMapping: contentLocaleMapping,

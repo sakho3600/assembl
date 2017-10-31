@@ -7,7 +7,8 @@ import { orderPostsByMessageClassifier, getSynthesisTitle } from './utils';
 export default ({
   messageColumns,
   posts,
-  idea,
+  ideaId,
+  ideaTitle,
   width,
   lang,
   contentLocaleMapping,
@@ -22,7 +23,7 @@ export default ({
       {Object.keys(columnsArray).map((classifier, index) => {
         const synthesisProps = showSynthesis && {
           classifier: classifier,
-          synthesisTitle: getSynthesisTitle(classifier, messageColumns[index].name, idea.title),
+          synthesisTitle: getSynthesisTitle(classifier, messageColumns[index].name, ideaTitle),
           synthesisBody: messageColumns[index].header || I18n.t('multiColumns.synthesis.noSynthesisYet'),
           hyphenStyle: { borderTopColor: messageColumns[index].color }
         };
@@ -38,9 +39,9 @@ export default ({
             data={columnsArray[classifier]}
             initialRowIndex={initialRowIndex}
             noRowsRenderer={noRowsRenderer}
-            ideaId={idea.id}
+            ideaId={ideaId}
             refetchIdea={refetchIdea}
-            ideaTitle={idea.title}
+            ideaTitle={ideaTitle}
           />
         );
       })}
